@@ -1,6 +1,6 @@
 # 1.sleep
 > int
-main(int argc, char *argv[])
+> ```main(int argc, char *argv[])
 {
   if(argc < 2){
     fprintf(2, "Usage: sleep [time]\n");
@@ -10,4 +10,4 @@ main(int argc, char *argv[])
   int time = atoi(argv[1]);
   sleep(time);
   exit(0);
-}
+}```
