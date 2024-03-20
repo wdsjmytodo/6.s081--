@@ -28,5 +28,3 @@ int main(int argc, char *argv[])
 
 
 # 5.find
-
-<span style="color: red;">这是一段红色的文本</span>
