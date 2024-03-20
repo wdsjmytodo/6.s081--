@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 # 2.pingpong
 ```
 ```
-<span style="color = yellow;">this is pingpong_lab</span>
+<pre style="color = yellow;">this is pingpong_lab</pre>
 
 
 # 3.prime
