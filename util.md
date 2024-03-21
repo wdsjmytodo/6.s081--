@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
 }
 ```
 # 2.pingpong
-```
-```
+*pipe(p)的时候，p必须是个数组类型，能获取pipe的读和写端，0=读，1=写
+*when use fork:pid=0, child ; pid>1, parent
 <pre style="color = red;">this is pingpong_lab</pre>
+**这是加粗的_ctrl b**
 
-
-# 3.prime
+# 3.primes
 ```
 ```
 
