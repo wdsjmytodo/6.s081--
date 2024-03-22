@@ -18,12 +18,24 @@ int main(int argc, char *argv[])
 
 
 # 3.primes
+
+```
+
+
+```
+
+# 4.find
 - 一些重要的点：<br>
 + 将ls函数全部copy到find.c，其实我们就是改ls函数<br>
 + find path target<br>
 + 当你不知道怎么调试的时候，可以通过printf()来检查某个函数的输出结果是什么<br>
 + 递归必须在输出之后<br>
 ```
+#include "kernel/types.h"
+#include "kernel/stat.h"
+#include "user/user.h"
+#include "kernel/fs.h"
+
 //格式化name，即将./console->console
 char*
 fmtname(char *path)
@@ -147,15 +159,6 @@ main(int argc, char *argv[])
   }
   exit(0);
 }
-
-
-
-
-```
-
-# 4.find
-```
-
 
 ```
 
