@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 }
 ```
 # 2.pingpong
-## 注意：
+### 注意：
 * pipe(p)的时候，p必须是个有两个空间的数组，能获取pipe的读和写端，0=读，1=写 <br>
 * when use fork:pid=0, child ; pid>1, parent <br>
 * parent need to use wait(), child need to use exit().
@@ -60,7 +60,8 @@ int main(int argc, char *argv[]){
 
 # 3.primes
 
-思路：递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
+### 思路：
+递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
 要记得每个进程关掉不必要的fd<br>
 
 ```
@@ -141,7 +142,7 @@ int main(int argc, char *argv[]){
 ```
 
 # 4.find
-- 一些重要的点：<br>
+### 一些重要的点:
 + 将ls函数全部copy到find.c，其实我们就是改ls函数<br>
 + find path target<br>
 + 当你不知道怎么调试的时候，可以通过printf()来检查某个函数的输出结果是什么<br>
@@ -279,6 +280,7 @@ main(int argc, char *argv[])
 ```
 
 # 5.xargs
+### steps:
 + 要求是echo bye | xargs echo hello too 输出hello too bye
 + 首先fd 0 能够用来读取管道的标准化输入
 + 其次用字符串数组接受xargs的参数
