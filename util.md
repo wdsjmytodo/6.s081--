@@ -285,6 +285,7 @@ main(int argc, char *argv[])
 + 首先fd 0 能够用来读取管道的标准化输入
 + 其次用字符串数组接受xargs的参数
 + 最后是参数的拼接，若从fd 0读出的输入出现"\n",将其改为\0并拼接前半部分的参数，用数组的for循环实现
++ 通过exec(command, arguments)来实现xargs后接的第一个command
 
 ```
 #include "kernel/types.h"
