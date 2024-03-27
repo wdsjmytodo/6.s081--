@@ -19,8 +19,83 @@ int main(int argc, char *argv[])
 
 # 3.primes
 
-```
+思路：递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
+要记得每个进程关掉不必要的fd
 
+```
+#include "kernel/types.h"
+#include "kernel/stat.h"
+#include "user/user.h"
+
+void seive(int left_pipe[2]){//筛子
+      //读取left_pipe的第一个数
+      int p;
+      read(left_pipe[0], &p, sizeof(int));
+      if(p == -1){
+            //是哨兵，到最后了
+            exit(0);
+      }
+
+      //按要求输出
+      printf("prime: %d\n", p);
+
+      //关闭不用的管道：左管道的写_fd
+      close(left_pipe[1]);
+
+      //创建右管道
+      int right_pipe[2];
+      pipe(right_pipe);
+      
+      int pid_n = fork();
+      if(pid_n != 0){//当前进程
+            //关闭不用的管道：右边的管道的 读_fd
+            close(right_pipe[0]);
+
+            //筛选，将不是第一个数的倍数的数写给右管道
+            int buf;
+            while (read(left_pipe[0], &buf, sizeof(buf)) != -1)
+            {
+                  if(buf % p != 0){
+                        write(right_pipe[1], &buf, sizeof(buf));
+                  }
+            }
+
+            //补写哨兵
+            buf = -1;
+            write(right_pipe[1], &buf, sizeof(buf));
+
+            //最后又关掉这些管道
+            close(left_pipe[0]);
+            close(right_pipe[1]);
+
+            wait(0);
+      }else if(pid_n == 0){//下个进程
+            seive(right_pipe);
+            exit(0);
+      }
+}
+
+int main(int argc, char *argv[]){
+      //创建第一个pipe
+      int left_pipe[2];
+      pipe(left_pipe);
+
+      int pid = fork();
+      if(pid == 0){
+            seive(left_pipe);
+            exit(0);
+      }else if(pid > 0){
+            //向第一个pipe里写入2-32
+            for (int i = 2; i < 33; i++)
+            {     
+                  write(left_pipe[1], &i , sizeof(i));
+            }
+            close(left_pipe[0]);
+            close(left_pipe[1]);
+      }
+      wait(0);
+      exit(0);     
+}
 
 ```
 
