@@ -61,8 +61,8 @@ int main(int argc, char *argv[]){
 # 3.primes
 
 ### 思路：
-递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
-要记得每个进程关掉不必要的fd<br>
++ 递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
++ 要记得每个进程关掉不必要的fd<br>
 
 ```
 #include "kernel/types.h"
