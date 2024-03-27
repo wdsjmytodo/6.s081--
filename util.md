@@ -13,9 +13,50 @@ int main(int argc, char *argv[])
 }
 ```
 # 2.pingpong
-* pipe(p)的时候，p必须是个数组类型，能获取pipe的读和写端，0=读，1=写 <br>
+## 注意：
+* pipe(p)的时候，p必须是个有两个空间的数组，能获取pipe的读和写端，0=读，1=写 <br>
 * when use fork:pid=0, child ; pid>1, parent <br>
+* parent need to use wait(), child need to use exit().
+```
+#include "kernel/types.h"
+#include "kernel/stat.h"
+#include "user/user.h"
 
+int main(int argc, char *argv[]){
+      int p2c[2], c2p[2];
+      if(pipe(p2c) < 0){
+            printf("pipe panic\n");
+            exit(-1);
+      }
+      if(pipe(c2p) < 0){
+            printf("pipe panic\n");
+            exit(-1);
+      }
+      printf("p2c[0]: %d,p2c[1]: %d\n",p2c[0],p2c[1]);
+      printf("parent_read_fd:%d, parent_write_fd:%d\n",c2p[0],p2c[1]);
+      printf("kid_read_fd:%d, kid_write_fd:%d\n",p2c[0],c2p[1]);
+      int pid = fork();
+      if(pid == 0){
+            //this is child process
+            char buf[10];
+            read(p2c[0],buf,10);
+            printf("%d:kid has received ping\n", getpid());
+            write(c2p[1],"p",1);
+      }else if (pid > 0)
+      {     
+            //this is parent process
+            char buf[10];
+            write(p2c[1],"c",1);
+            read(c2p[0],buf,10);
+            printf("%d:parent has received pong\n",getpid());
+      }
+      close(p2c[0]);
+      close(p2c[1]);
+      close(c2p[0]);
+      close(c2p[1]);
+      exit(0);
+}
+```
 
 # 3.primes
 
