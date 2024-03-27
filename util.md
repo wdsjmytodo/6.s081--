@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 # 3.primes
 
 思路：递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
-要记得每个进程关掉不必要的fd
+要记得每个进程关掉不必要的fd<br>
 
 ```
 #include "kernel/types.h"
@@ -238,8 +238,62 @@ main(int argc, char *argv[])
 ```
 
 # 5.xargs
-```
++ 要求是echo bye | xargs echo hello too 输出hello too bye
++ 首先fd 0 能够用来读取管道的标准化输入
++ 其次用字符串数组接受xargs的参数
++ 最后是参数的拼接，若从fd 0读出的输入出现"\n",将其改为\0并拼接前半部分的参数，用数组的for循环实现
 
+```
+#include "kernel/types.h"
+#include "kernel/param.h"
+#include "kernel/stat.h"
+#include "user/user.h"
+#include "kernel/fs.h"
+
+#define MAXSIZE 16
+int main(int argc, char *argv[]){
+      //echo xsq | xargs echo nice to meet you
+
+
+      //读取标准化输入--stdin--fd=0
+      //stdin = xsq
+      char stdin[MAXSIZE];
+      read(0, stdin, MAXSIZE);
+
+      //获取自己的参数
+      //xargv = echo[0] nice[1] to[2] meet[3] you[4] 
+      char *xargv[MAXARG];
+      int xargc = 0;
+      for(int i = 1; i < argc; i++){
+            xargv[xargc] = argv[i];
+            xargc++;  
+      }
+      
+
+      char *p = stdin;
+      for(int j = 0; j < MAXSIZE; j++){
+            if(stdin[j] == '\n'){//如果在stdin里出现"\n",将其变为0，并拼接到xargv
+                  int pid;
+                  pid = fork();
+                  if(pid == 0){
+                        //child
+                        stdin[j] = 0;
+                        xargv[xargc] = p;
+                        xargc++;
+                        xargv[xargc] = 0; 
+                        
+                        exec(xargv[0], xargv);
+                        exit(0);
+                  }else if(pid > 0){
+                        //parent
+                        p = &stdin[j+1];
+                        wait(0);
+                  }
+            }
+      }
+      wait(0);
+      exit(0);
+}
 
 
 ```
