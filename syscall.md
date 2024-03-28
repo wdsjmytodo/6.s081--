@@ -2,7 +2,7 @@
       one of syscalls
 ### tips:
 + step1:添加trace这个syscall，让他能run
-  - ![Add $U/_trace to UPROGS in Makefile]("D:\New desk\新建\OS code\lab2\cc5366682b1e481df2bf3e242b153a5.png") 
+  - [![add trace in makefile](https://s21.ax1x.com/2024/03/28/pFoYoF0.png)](https://imgse.com/i/pFoYoF0)
   - ![]() 
   - ![]()
    
