@@ -1,8 +1,13 @@
 # trace (系统调用的实现)
-### tips:
-+ step1:添加trace这个syscall，让他能run
-  - add trace to Makefile <br>
-  <img src="https://s2.loli.net/2024/03/28/IMwvsfiYz7lg2Tc.png" alt="alt text" width="304" height="228"> <br>
-  - add a prototype for the system call to user/user.h, a stub to user/usys.pl, and a syscall number to kernel/syscall.h. <br>
-  <a href="https://sm.ms/image/fde2Q1gPm3ODcE9" target="_blank"><img src="https://s2.loli.net/2024/03/28/fde2Q1gPm3ODcE9.png" ></a>
-+ step2:
+### step1:将trace加入MakeFile <br>
+  $U/_trace\  <br>
+### step2:实现trace这个系统调用，让他能跑的通，能够make qemu <br>
+  - 首先在usys.pl给他一个入口 <br>
+    entry("trace");
+  - 再在syscall.h中给trace一个系统调用号 <br>
+    #define SYS_trace  22
+  - 再在user.h给一个trace函数的声明 <br>
+    int trace(int);
+  - 再在sysproc.c中写个sys_trace()函数，仅让他返回0 <br>
+  这样make qemu 就能编译成功了 <br>
+### step3:sys_trace()的具体实现
