@@ -66,4 +66,79 @@
       }
     }
     ```
-# sysinfo
+# sysinfo(参照fstat())
+### step1:让sysinfo这个系统调用能够跑起来
+  + ```modify user.h, usys.pl, syscall.h```
+  + add ```sys_sysinfo()``` in ```sysproc.c``` <br>
+
+### step2:实现sysinfo
+  + ```sys_info()```的实现 
+  ```
+  uint64
+  sys_sysinfo(void)
+  {
+    uint64 addr;
+    struct sysinfo info;
+    struct proc *p = myproc();
+
+    if(argaddr(0, &addr) < 0) //获取sysinfo系统调用指向的sysinfo结构体的指针
+      return -1;
+
+    //让sysinfo结构体的freemem等于kernel填充的东西，需要在kalloc中实现，freemem是空
+    //闲内存
+    info.freemem = freemem_collect();
+    //同上，需要在proc.c中实现，nproc是已使用进程个数                             
+    info.nproc = nproc_collect();
+
+    //将内核的info结构体通过copyout返回给用户addr，即上面获取的
+    if(copyout(p->pagetable, addr, (char *)&info, sizeof(info)) < 0)
+        return -1;
+    
+    return 0;
+  }
+  ```
+  + ```freemem_collect()```的实现
+  ```
+  uint64
+  freemem_collect(void)
+  {
+    //r是个链表
+    struct run *r;
+    uint64 cnt_freemem = 0;
+
+    //经过debug，把锁注释掉了sysinfotest才通过
+    // acquire(&kmem.lock);
+    r = kmem.freelist;
+    //遍历空闲链表并计数
+    while(r){
+      r = r->next;
+      cnt_freemem += 4096;
+    } 
+
+    // release(&kmem.lock);
+
+    //返回空闲链表的 个数*size
+    return cnt_freemem;
+  }
+  ```
+  + ```nproc_collect()```的实现
+  ```
+  uint64
+  nproc_collect(void)
+  {
+    struct proc *p;
+    uint64 cnt_nproc = 0;
+
+    for(p = proc; p < &proc[NPROC]; p++) {
+      // acquire(&p->lock);
+      if(p->state != UNUSED) {
+        cnt_nproc++;
+      }// else {
+      //    release(&p->lock);
+      //  }
+    }
+
+    return cnt_nproc;
+  }
+  ```
+  
