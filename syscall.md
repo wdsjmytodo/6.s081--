@@ -42,7 +42,7 @@
       "open", "write", "mknod", "unlink", "link", "mkdir", "close", "trace",
     };
     ```
-  * 打印结果
+  * 在syscall()函数中加入输出打印结果的代码
     ```
     void
     syscall(void)
@@ -54,8 +54,8 @@
       if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
         p->trapframe->a0 = syscalls[num]();
         
-        //print_result  3: syscall read -> 1023
-        if((p->mask >> num) & 1){
+        if((p->mask >> num) & 1){ //判断是否命中 
+          //若命中则输出这种格式  3: syscall read -> 1023
           printf("%d: syscall %s -> %d\n", p->pid, buf[num - 1], p->trapframe->a0);
         }
         
