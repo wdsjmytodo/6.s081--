@@ -68,7 +68,7 @@
     ```
 # sysinfo(参照fstat())
 ### step1:让sysinfo这个系统调用能够跑起来
-  + ```modify user.h, usys.pl, syscall.h```
+  + modify ```user.h, usys.pl, syscall.h```
   + add ```sys_sysinfo()``` in ```sysproc.c``` <br>
 
 ### step2:实现sysinfo
