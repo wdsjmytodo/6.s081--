@@ -2,7 +2,7 @@
 # 1.speed up system calls
 + 这个实验的目的是让我们对内存页有更加清晰的认识
   
-- map the USYSCALL page just below TRAPFRAME page in proc_pagetable() in proc.c
+  - map the USYSCALL page just below TRAPFRAME page in proc_pagetable() in proc.c
   ```
   if(mappages(pagetable, USYSCALL, PGSIZE,
               (uint64)(p->usyscall), PTE_R | PTE_U) < 0){
