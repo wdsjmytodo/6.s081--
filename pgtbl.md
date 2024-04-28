@@ -78,7 +78,8 @@
 + for me 从这个lab,可知
   - sysproc.c中的函数都是系统调用函数，是给user 用来调用的，因此像sys_pgaccess()用argaddr,argint 接受的参数都是属于用户的，因此使用copyout()时，这些参数当作destination，从而将内核的信息copy到这些参数进而上交给用户
   - vm_pgaccess要参照wlakaddr(pagetable, va)和walk(pagetable, va, 0)，这种函数是把va传进去，然后获得pte【这个主要是walk()的作用】，然后验证标志位，从而达到我们想要的目的
-  
+
+### sys_pgaccess()
 ```
 sys_pgaccess(void)
 {
