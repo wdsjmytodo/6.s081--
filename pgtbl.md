@@ -72,3 +72,58 @@
   ```
   void            vmprint(pagetable_t, int);
   ```
+
+# 3.detecting which page has been accessed
++ 理解这个实验叫我们干什么，因此要参考一下pgtbltest()函数
++ for me 从这个lab,可知
+  - sysproc.c中的函数都是系统调用函数，是给user 用来调用的，因此像sys_pgaccess()用argaddr,argint 接受的参数都是属于用户的，因此使用copyout()时，这些参数当作destination，从而将内核的信息copy到这些参数进而上交给用户
+  - vm_pgaccess要参照wlakaddr(pagetable, va)和walk(pagetable, va, 0)，这种函数是把va传进去，然后获得pte【这个主要是walk()的作用】，然后验证标志位，从而达到我们想要的目的
+  
+```
+sys_pgaccess(void)
+{
+  // lab pgtbl: your code here.
+
+  
+  //int pgaccess(void *base, int len, void *mask);
+  //接收参数，并且这些参数可以视作都是用户的
+
+  //base是起始页地址,base、len、mask都是用户的
+  uint64 base;
+  int len;
+  int mask;
+  if(argaddr(0, &base) < 0)
+    return -1;
+  if(argint(1, &len) < 0)
+    return -1;
+  if(argint(2, &mask) < 0)
+    return -1;
+  //设置len
+  if( len < 0 || len > 32){
+    return -1;
+  }
+  struct proc *p = myproc();
+
+  //用result来接受内核中的访问结果，result应该为32位，因为pgtbltest测试中len=32
+  //for循环通过vm_pgaccess()函数检验page的PTE_A位来确定abit的值，然后result移位
+  //result的第几位是1代表第几个page被访问了
+  int result = 0;
+  for(int i = 0; i < len; i++){
+    int va = base + i * PGSIZE;
+
+    //abit = 0 / 1
+    //vm_pgaccess参照walkaddr()
+    int abit = vm_pgaccess(p->pagetable, va);
+
+    //result 移位
+    result = result | abit << i;
+  }
+
+  //将result copyout to mask
+  if(copyout(p->pagetable, mask, (char*)&result, sizeof(result)) < 0){
+    return -1;
+  }
+  return 0;
+}
+```  
+  
