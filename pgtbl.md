@@ -126,4 +126,28 @@ sys_pgaccess(void)
   return 0;
 }
 ```  
+
+### vm_pgaccess() implement in vm.c
+```
+//return 0 if pte's PTE_A = 0
+//return 1 if pte's PTE_A = 1, as the same time, reset PTE_A to 0
+int
+vm_pgaccess(pagetable_t pagetable, uint64 va)
+{
+  pte_t *pte;
+
+  if(va >= MAXVA)
+    return 0;
+
+  pte = walk(pagetable, va, 0);
+  if(pte == 0)
+    return 0;
   
+  if((*pte & PTE_A) != 0){
+    *pte = *pte & (~PTE_A);
+    return 1; 
+  }
+
+  return 0;
+}
+```
