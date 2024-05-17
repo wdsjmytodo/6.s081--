@@ -10,18 +10,18 @@
       void
       backtrace(void)
       { 
-      printf("bracktrace:\n");
-      //fp: 0x0000003fffff9f88
-      uint64 fp =  r_fp();
-      uint64 *stack_frame = (uint64 *)fp;
+            printf("bracktrace:\n");
+            //fp: 0x0000003fffff9f88
+            uint64 fp =  r_fp();
+            uint64 *stack_frame = (uint64 *)fp;
 
-      uint64 up = PGROUNDUP(fp);
-      uint64 down = PGROUNDDOWN(fp);
-      while (fp < up && fp > down)
-      {
-      printf("%p\n", stack_frame[-1]);
-      fp = stack_frame[-2] ;
-      stack_frame = (uint64 *)fp;
-      }
+            uint64 up = PGROUNDUP(fp);
+            uint64 down = PGROUNDDOWN(fp);
+            while (fp < up && fp > down)
+            {
+                  printf("%p\n", stack_frame[-1]);
+                  fp = stack_frame[-2] ;
+                  stack_frame = (uint64 *)fp;
+            }
       }
   ```
