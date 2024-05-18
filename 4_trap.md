@@ -25,3 +25,26 @@
             }
       }
   ```
+
+# Alarm
+## 1.test0()部分
+### ```这个实验是通过时间中断的方式让程序转到handler```
++ user/alarmtest.c   add it to Makefile
++ sigalarm(ticks, fn)
+  查看了alarmtest.c的test0(),先调用sigalarm(2, periodic())
+  periodic()让count+1,并且输出alarm,然后调用sigreturn()
++ 添加系统调用sigalarm和sigreturn
++ add ticks, fn, ticks_count to struct proc in proc.h
+  ticks_counts用于记录两个系统调用之间经过了多少个ticks
++ in trap.c 修改时间中断的部分
+```
+if(which_dev == 2){
+    if(p->ticks > 0){
+      p->ticks_count++;
+      if(p->ticks_count > p->ticks){
+        p->trapframe->epc = p->handler;
+      }
+    }
+    yield();
+  }
+```
