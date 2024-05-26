@@ -1,6 +1,12 @@
 # Eliminate allocation from sbrk()
+```在sys_sbrk()中: ```
+```
+// if(growproc(n) < 0)  //将这两行注释掉
+  //   return -1;
+  myproc()->sz += n; //只让sz的大小提升，不实际分配空间
+```
 # Lazy allocation
-``` 在usertrap()中添加：```
+``` 在usertrap()中添加:```
   ```
     else if(r_scause() == 13 || r_scause() == 15){//用于判断中断来自lazy-alloc的异常情况
     uint64 va = r_stval();
