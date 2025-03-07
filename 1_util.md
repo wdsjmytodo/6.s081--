@@ -1,17 +1,32 @@
-# 1.sleep
-```
+# Sleep Program
+
+This is a simple C program that demonstrates the use of the `sleep` function. The program takes a single argument, which is the number of seconds to sleep.
+
+## Code
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 int main(int argc, char *argv[])  
 {
+  // Check if the user provided a time argument
   if(argc < 2){
     fprintf(2, "Usage: sleep [time]\n");
     exit(1);
   }
 
+  // Convert the argument to an integer
   int time = atoi(argv[1]);
+
+  // Sleep for the specified time
   sleep(time);
+
+  // Exit the program successfully
   exit(0);
 }
-```
+
 # 2.pingpong
 ### 注意：
 * pipe(p)的时候，p必须是个有两个空间的数组，能获取pipe的读和写端，0=读，1=写 <br>
