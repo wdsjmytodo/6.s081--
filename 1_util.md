@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 * pipe(p)的时候，p必须是个有两个空间的数组，能获取pipe的读和写端，0=读，1=写 <br>
 * when use fork:pid=0, child ; pid>1, parent <br>
 * parent need to use wait(), child need to use exit().
-```
+```c
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]){
 + 递归调用fork(),每个子进程输出第一个数，并且筛选掉第一个数的整数倍<br>
 + 要记得每个进程关掉不必要的fd<br>
 
-```
+```c
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]){
 + find path target<br>
 + 当你不知道怎么调试的时候，可以通过printf()来检查某个函数的输出结果是什么<br>
 + 递归必须在输出之后<br>
-```
+```c
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
@@ -298,7 +298,7 @@ main(int argc, char *argv[])
 + 最后是参数的拼接，若从fd 0读出的输入出现"\n",将其改为\0并拼接前半部分的参数，用数组的for循环实现
 + 通过exec(command, arguments)来实现xargs后接的第一个command
 
-```
+```c
 #include "kernel/types.h"
 #include "kernel/param.h"
 #include "kernel/stat.h"
