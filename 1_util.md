@@ -1,4 +1,4 @@
-# Sleep Command Implementation in C
+# 1.Sleep Command Implementation in C
 
 This is a simple C program that implements a basic `sleep` command. The program takes a single argument representing the time (in seconds) to sleep.
 
