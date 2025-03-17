@@ -1,15 +1,26 @@
-# 1.sleep
-```
+# Sleep Command Implementation in C
+
+This is a simple C program that implements a basic `sleep` command. The program takes a single argument representing the time (in seconds) to sleep.
+
+## Code
+
+```c
 int main(int argc, char *argv[])  
 {
-  if(argc < 2){
-    fprintf(2, "Usage: sleep [time]\n");
-    exit(1);
-  }
+    // Check if the correct number of arguments is provided
+    if (argc < 2) {
+        fprintf(stderr, "Usage: sleep [time]\n");
+        exit(1);
+    }
 
-  int time = atoi(argv[1]);
-  sleep(time);
-  exit(0);
+    // Convert the argument to an integer
+    int time = atoi(argv[1]);
+
+    // Sleep for the specified time
+    sleep(time);
+
+    // Exit the program successfully
+    exit(0);
 }
 ```
 # 2.pingpong
