@@ -9,7 +9,7 @@
   - 再在user.h给一个trace函数的声明 <br>
     ```int trace(int);```
   - 再在sysproc.c中写个sys_trace()函数，仅让他返回0 <br>
-    ```
+    ```c
     uint64
     sys_trace(void){
       return 0;
@@ -17,7 +17,7 @@
     ``` 
   - 这样make qemu 就能编译成功了,初步完成雏形 <br>
 ### step3:sys_trace()的具体实现  
-  ```
+  ```c
   uint64
   sys_trace(void)
   {
@@ -35,7 +35,7 @@
 ### step4:修改syscall()
   * 在syscall.c中将```[SYS_trace]   sys_trace```加到```(*syscalls[])```中
   * ```//add a array of syscall to print its name for lab_trace```
-    ```
+    ```c
     char *buf[] = {
       "fork", "exit", "wait", "pipe", "read", "kill", "exec", "fstat", "chdir",
       "dup", "getpid", "sbrk", "sleep", "uptime",
@@ -43,7 +43,7 @@
     };
     ```
   * 在syscall()函数中加入输出打印结果的代码
-    ```
+    ```c
     void
     syscall(void)
     {
@@ -73,7 +73,7 @@
 
 ### step2:实现sysinfo
   + ```sys_info()```的实现 
-  ```
+  ```c
   uint64
   sys_sysinfo(void)
   {
@@ -98,7 +98,7 @@
   }
   ```
   + ```freemem_collect()```的实现
-  ```
+  ```c
   uint64
   freemem_collect(void)
   {
@@ -122,7 +122,7 @@
   }
   ```
   + ```nproc_collect()```的实现
-  ```
+  ```c
   uint64
   nproc_collect(void)
   {

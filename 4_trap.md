@@ -6,7 +6,7 @@
   - ->走到sys_sleep() in sysproc.c,因此我们要在sys_sleep()里调用backtrace()
   - Implement a backtrace() function in kernel/printf.c
 + 主要函数backtrace() 的实现:
-  ```
+  ```c
       void
       backtrace(void)
       { 
@@ -37,7 +37,7 @@
 + add ticks, fn, ticks_count to struct proc in proc.h
   ticks_counts用于记录两个系统调用之间经过了多少个ticks
 + in trap.c 修改时间中断的部分
-```
+```c
 if(which_dev == 2){
     if(p->ticks > 0){
       p->ticks_count++;
@@ -51,8 +51,8 @@ if(which_dev == 2){
 ## 2.test1()和test2()的部分
 ### ```要求: when the alarm handler is done, control returns to the instruction at which the user program was originally interrupted by the timer interrupt```
 ```在执行handler()之前通过在proc中新建一些变量来保存现场，然后执行完handler()后四个return函数要恢复现场```
-```
-保存:
+```c
+//保存:
 void
 preserve(void)
 {
@@ -91,7 +91,7 @@ preserve(void)
   p->alarm_t6 = p->trapframe->t6;
 }
 
-恢复:
+//恢复:
 void
 recover()
 {

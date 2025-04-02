@@ -3,7 +3,7 @@
 + 这个实验的目的是让我们对内存页有更加清晰的认识
   
   - map the USYSCALL page just below TRAPFRAME page in proc_pagetable() in proc.c
-  ```
+  ```c
   if(mappages(pagetable, USYSCALL, PGSIZE,
               (uint64)(p->usyscall), PTE_R | PTE_U) < 0){
     uvmunmap(pagetable, USYSCALL, 1, 0);
@@ -13,7 +13,7 @@
   }
   ```
   - alloc and initialize usyscall page in allcoproc() in proc.c 
-  ```
+  ```c
    if((p->usyscall = (struct usyscall *)kalloc()) == 0){
     freeproc(p);
     release(&p->lock);
@@ -22,7 +22,7 @@
    p->usyscall->pid = p->pid; //让结构体的pid直接等于进程的pid以实现加速
   ```
   - free the page in freeproc()
-  ```
+  ```c
   //free usyscall page
   if(p->usyscall)
     kfree((void*)p->usyscall);
@@ -32,12 +32,12 @@
 # 2.print a pagetble
 + 这个实验加深我们对于xv6的三级页表理解
   - Insert if(p->pid==1) vmprint(p->pagetable, 0) in exec.c just before the return argc, to print the first process's page table.//这里我改了一下，将页表的级数也传进来以区别是第几级页表。加这段代码使得exec能够运行vmprint()。
-  ```
+  ```c
   if(p->pid==1)
    vmprint(p->pagetable, 0);
   ```
   - implement of vmprint() in vm.c 。(可以参照freewalk函数对页表的递归调用)
-  ```
+  ```c
   void
   vmprint(pagetable_t pagetable, int depth)
   {
@@ -69,7 +69,7 @@
   }
   ```
   - 记得在defs.h中声明vmprint()
-  ```
+  ```c
   void            vmprint(pagetable_t, int);
   ```
 
@@ -80,7 +80,7 @@
   - vm_pgaccess要参照wlakaddr(pagetable, va)和walk(pagetable, va, 0)，这种函数是把va传进去，然后获得pte【这个主要是walk()的作用】，然后验证标志位，从而达到我们想要的目的
 
 ### sys_pgaccess()
-```
+```c
 sys_pgaccess(void)
 {
   // lab pgtbl: your code here.
@@ -129,7 +129,7 @@ sys_pgaccess(void)
 ```  
 
 ### vm_pgaccess() implement in vm.c
-```
+```c
 //return 0 if pte's PTE_A = 0
 //return 1 if pte's PTE_A = 1, as the same time, reset PTE_A to 0
 int
